@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,12 +21,13 @@ import lombok.AllArgsConstructor;
  */
 @AllArgsConstructor
 @RestController
-@RequestMapping("/ap1/v1/stories")
+@RequestMapping("/api/v1/stories")
 public class StoryController {
 
 	private final IStoryService storyService;
 	
 	@RequestMapping("/")
+	@ResponseBody
 	public List<StoryDto> findAll()
 	{
 		return storyService.findAll();
