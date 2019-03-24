@@ -5,9 +5,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+import lombok.Getter;
+
 /**
  * @author hvnis
  */
+@Getter
 @MappedSuperclass
 public abstract class AbstractEntity {
 

@@ -6,20 +6,18 @@ import javax.persistence.Table;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * @author hvnis
  */
 @NoArgsConstructor
 @Getter
+@Setter
 @Entity
-@Table(name = "story")
-public class StoryEntity extends AbstractEntity {
+@Table(name = "role")
+public class RoleEntity extends AbstractEntity {
 
-    @Column
+    @Column(unique = true)
     private String name;
-
-    public StoryEntity(final String name) {
-        this.name = name;
-    }
 }

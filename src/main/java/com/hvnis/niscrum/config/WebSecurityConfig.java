@@ -2,17 +2,16 @@ package com.hvnis.niscrum.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.hvnis.niscrum.encoder.BCryptEncoder;
+import com.hvnis.niscrum.common.Constant;
 import com.hvnis.niscrum.jwt.JWTAuthenticationFilter;
 import com.hvnis.niscrum.jwt.JWTLoginFilter;
-import com.hvnis.niscrum.repository.PersistentLoginRepository;
-import com.hvnis.niscrum.security.UserDetailsServiceImpl;
+import com.hvnis.niscrum.security.CustomAuthenticationEntryPoint;
+import com.hvnis.niscrum.security.CustomAuthenticationManager;
 
 import lombok.AllArgsConstructor;
 
@@ -21,29 +20,32 @@ import lombok.AllArgsConstructor;
  */
 @AllArgsConstructor
 @Configuration
-@EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserDetailsServiceImpl userDetailsService;
+    private final CustomAuthenticationManager customAuthenticationManager;
 
-    private final PersistentLoginRepository persistentLoginRepository;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
-    private final BCryptEncoder bCryptEncoder;
+    private final JWTLoginFilter jwtLoginFilter;
+
+    private final JWTAuthenticationFilter jwtAuthenticationFilter;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().authorizeRequests().antMatchers("/").permitAll() //
-                .antMatchers(HttpMethod.POST, "/login").permitAll() //
-                .antMatchers(HttpMethod.GET, "/login").permitAll() // For Test on Browser
-                .anyRequest().authenticated().and().rememberMe().tokenRepository(persistentLoginRepository)
-                .tokenValiditySeconds(1 * 24 * 60 * 60).and()
-                .addFilterBefore(new JWTLoginFilter("/login", authenticationManager()),
-                        UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.csrf().disable().authorizeRequests().antMatchers(HttpMethod.POST, Constant.LOGIN_PATH).permitAll()
+                .anyRequest().authenticated().and().exceptionHandling()
+                .authenticationEntryPoint(customAuthenticationEntryPoint).and()
+                .addFilterBefore(jwtLoginFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptEncoder);
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return customAuthenticationManager;
+    }
+
+    @Override
+    protected AuthenticationManager authenticationManager() throws Exception {
+        return customAuthenticationManager;
     }
 }

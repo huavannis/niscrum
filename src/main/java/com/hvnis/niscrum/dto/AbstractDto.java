@@ -7,8 +7,5 @@ import java.io.Serializable;
  */
 public abstract class AbstractDto implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1250090316920268256L;
 }
