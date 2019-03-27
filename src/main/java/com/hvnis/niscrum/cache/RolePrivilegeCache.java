@@ -32,18 +32,18 @@ public class RolePrivilegeCache {
     @PostConstruct
     private void init() {
         rolePrivilegeCache = new HashMap<>();
-        rolePrivilegeRepository.findAll().stream().forEach(this::putRolePrivilege);
+        rolePrivilegeRepository.findAll().stream().forEach(this::putRolePrivilegeToCache);
     }
 
-    public void putRolePrivilege(RolePrivilegeEntity rolePrivilegeEntity) {
+    public void putRolePrivilegeToCache(RolePrivilegeEntity rolePrivilegeEntity) {
         rolePrivilegeCache.put(rolePrivilegeEntity.getId(), rolePrivilegeEntity);
     }
 
-    public Optional<RolePrivilegeEntity> getRolePrivilege(Long id) {
+    public Optional<RolePrivilegeEntity> getRolePrivilegeFromCache(Long id) {
         return Optional.ofNullable(rolePrivilegeCache.get(id));
     }
 
-    public List<RolePrivilegeEntity> getAllPrivileges(Long roleId) {
+    public List<RolePrivilegeEntity> getAllPrivilegesFromCache(Long roleId) {
         return rolePrivilegeCache.values().stream().filter(rolePrivilege -> rolePrivilege.getRoleId().equals(roleId))
                 .collect(Collectors.toList());
     }

@@ -48,22 +48,22 @@ public class UserCache {
         userByIdCache = new HashMap<>();
         userByUsernameCache = new HashMap<>();
         authoritiesCache = new HashMap<>();
-        userRepository.findAll().stream().forEach(this::putUser);
+        userRepository.findAll().stream().forEach(this::putUserToCache);
     }
 
-    public Optional<UserEntity> getUserById(Long id) {
+    public Optional<UserEntity> getUserByIdFromCache(Long id) {
         return Optional.ofNullable(userByIdCache.get(id));
     }
 
-    public Optional<UserEntity> getUserByUsername(String username) {
+    public Optional<UserEntity> getUserByUsernameFromCache(String username) {
         return Optional.ofNullable(userByUsernameCache.get(username));
     }
 
-    public void putUser(UserEntity userEntity) {
+    public void putUserToCache(UserEntity userEntity) {
         Optional.ofNullable(userEntity).ifPresent(user -> {
             userByIdCache.put(user.getId(), user);
             userByUsernameCache.put(user.getUsername(), user);
-            updateAuthorities(user);
+            updateAuthoritiesToCache(user);
         });
     }
 
@@ -71,15 +71,15 @@ public class UserCache {
         return authoritiesCache.get(userEntity);
     }
 
-    public void updateAuthorities(UserEntity userEntity) {
+    public void updateAuthoritiesToCache(UserEntity userEntity) {
         Optional.ofNullable(userEntity).ifPresent(user -> authoritiesCache.put(user, getAuthorities(user)));
     }
 
     private Set<GrantedAuthority> getAuthorities(UserEntity userEntity) {
         Set<GrantedAuthority> authorities = new HashSet<>();
         Optional.ofNullable(userEntity).ifPresent(user -> {
-            userRoleCache.getAllRoles(user.getId()).stream().forEach(userRole -> {
-                roleCache.getRole(userRole.getRoleId()).ifPresent(role -> {
+            userRoleCache.getAllRolesFromCache(user.getId()).stream().forEach(userRole -> {
+                roleCache.getRoleFromCache(userRole.getRoleId()).ifPresent(role -> {
                     authorities.addAll(getAuthorities(role));
                 });
             });
@@ -91,8 +91,8 @@ public class UserCache {
         Set<GrantedAuthority> authorities = new HashSet<>();
         Optional.ofNullable(roleEntity).ifPresent(role -> {
             authorities.add(new SimpleGrantedAuthority(role.getName()));
-            rolePrivilegeCache.getAllPrivileges(role.getId()).stream().forEach(rolePrivilege -> {
-                privilegeCache.getPrivilege(rolePrivilege.getPrivilegeId()).ifPresent(privilege -> {
+            rolePrivilegeCache.getAllPrivilegesFromCache(role.getId()).stream().forEach(rolePrivilege -> {
+                privilegeCache.getPrivilegeFromCache(rolePrivilege.getPrivilegeId()).ifPresent(privilege -> {
                     authorities.addAll(getAuthorities(privilege));
                 });
             });

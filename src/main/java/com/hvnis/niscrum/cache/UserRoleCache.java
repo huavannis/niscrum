@@ -32,18 +32,18 @@ public class UserRoleCache {
     @PostConstruct
     private void init() {
         userRoleCache = new HashMap<>();
-        userRoleRepository.findAll().stream().forEach(this::putUserRole);
+        userRoleRepository.findAll().stream().forEach(this::putUserRoleToCache);
     }
 
-    public void putUserRole(UserRoleEntity userRoleEntity) {
+    public void putUserRoleToCache(UserRoleEntity userRoleEntity) {
         userRoleCache.put(userRoleEntity.getId(), userRoleEntity);
     }
 
-    public Optional<UserRoleEntity> getUserRole(Long id) {
+    public Optional<UserRoleEntity> getUserRoleFromCache(Long id) {
         return Optional.ofNullable(userRoleCache.get(id));
     }
 
-    public List<UserRoleEntity> getAllRoles(Long userId) {
+    public List<UserRoleEntity> getAllRolesFromCache(Long userId) {
         return userRoleCache.values().stream().filter(userRole -> userRole.getUserId().equals(userId))
                 .collect(Collectors.toList());
     }

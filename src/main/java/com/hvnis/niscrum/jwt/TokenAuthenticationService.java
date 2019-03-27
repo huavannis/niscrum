@@ -46,7 +46,7 @@ public final class TokenAuthenticationService {
             final Claims claims = tokenProvider.parseToken(token);
             Optional<Long> userIdOptional = Optional.ofNullable(claims.get(USER_ID_CLAIM_KEY, Long.class));
             if (userIdOptional.isPresent()) {
-                return userCache.getUserById(userIdOptional.get())
+                return userCache.getUserByIdFromCache(userIdOptional.get())
                         .map(userEntity -> new CustomAuthentication(userEntity.getUsername(), null,
                                 userCache.getAuthoritiesFromCache(userEntity)))
                         .orElse(null);

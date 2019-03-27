@@ -30,14 +30,14 @@ public class PrivilegeCache {
     @PostConstruct
     private void init() {
         privilegeCache = new HashMap<>();
-        privilegeRepository.findAll().stream().forEach(this::putPrivilege);
+        privilegeRepository.findAll().stream().forEach(this::putPrivilegeToCache);
     }
 
-    public void putPrivilege(PrivilegeEntity privilegeEntity) {
+    public void putPrivilegeToCache(PrivilegeEntity privilegeEntity) {
         privilegeCache.put(privilegeEntity.getId(), privilegeEntity);
     }
 
-    public Optional<PrivilegeEntity> getPrivilege(Long id) {
+    public Optional<PrivilegeEntity> getPrivilegeFromCache(Long id) {
         return Optional.ofNullable(privilegeCache.get(id));
     }
 }

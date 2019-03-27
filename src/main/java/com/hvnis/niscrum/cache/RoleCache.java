@@ -30,14 +30,14 @@ public class RoleCache {
     @PostConstruct
     private void init() {
         roleCache = new HashMap<>();
-        roleRepository.findAll().stream().forEach(this::putRole);
+        roleRepository.findAll().stream().forEach(this::putRoleToCache);
     }
 
-    public void putRole(RoleEntity roleEntity) {
+    public void putRoleToCache(RoleEntity roleEntity) {
         roleCache.put(roleEntity.getId(), roleEntity);
     }
 
-    public Optional<RoleEntity> getRole(Long id) {
+    public Optional<RoleEntity> getRoleFromCache(Long id) {
         return Optional.ofNullable(roleCache.get(id));
     }
 }
