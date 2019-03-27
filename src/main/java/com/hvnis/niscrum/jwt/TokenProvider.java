@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
-import com.hvnis.niscrum.exception.TokenException;
+import com.hvnis.niscrum.exception.TokenRuntimeException;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -25,11 +25,11 @@ public class TokenProvider {
                 .setClaims(claims).signWith(SignatureAlgorithm.HS512, SECRET).compact();
     }
 
-    public Claims parseToken(final String token) throws TokenException {
+    public Claims parseToken(final String token) throws TokenRuntimeException {
         try {
             return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
         } catch (Exception ex) {
-            throw new TokenException(ex);
+            throw new TokenRuntimeException(ex);
         }
     }
 }

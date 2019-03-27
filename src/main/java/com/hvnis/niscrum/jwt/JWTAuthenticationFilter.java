@@ -15,7 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
-import com.hvnis.niscrum.exception.TokenException;
+import com.hvnis.niscrum.exception.TokenRuntimeException;
 import com.hvnis.niscrum.exception.handler.ExceptionHandler;
 
 import lombok.AllArgsConstructor;
@@ -42,7 +42,7 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
 
             filterChain.doFilter(servletRequest, servletResponse);
 
-        } catch (TokenException ex) {
+        } catch (TokenRuntimeException ex) {
             exceptionHandler.handle((HttpServletRequest) servletRequest, (HttpServletResponse) servletResponse,
                     HttpStatus.UNAUTHORIZED, ex);
         }
