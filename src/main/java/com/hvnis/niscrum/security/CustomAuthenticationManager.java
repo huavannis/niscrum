@@ -34,12 +34,12 @@ public class CustomAuthenticationManager implements AuthenticationManager {
                     if (usernameOptional.isPresent() && passwordOptional.isPresent()) {
                         String username = usernameOptional.get();
                         String password = passwordOptional.get();
-                        Optional<UserEntity> userEntityOptional = userCache.getUserByUsernameFromCache(username);
+                        Optional<UserEntity> userEntityOptional = userCache.getUserByUsername(username);
                         if (userEntityOptional.isPresent()) {
                             UserEntity userEntity = userEntityOptional.get();
                             if (sha256Encoder.encode(password, userEntity.getSalt()).equals(userEntity.getPassword())) {
                                 return new CustomAuthentication(username, password,
-                                        userCache.getAuthoritiesFromCache(userEntity), userEntity, true);
+                                        userCache.getUserAuthorities(userEntity), userEntity, true);
                             }
                         }
                     }
