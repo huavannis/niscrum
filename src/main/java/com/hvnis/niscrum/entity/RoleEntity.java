@@ -18,6 +18,9 @@ import lombok.Setter;
 @Table(name = "role")
 public class RoleEntity extends AbstractEntity {
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String name;
+    
+    @Column
+    private String description;
 }

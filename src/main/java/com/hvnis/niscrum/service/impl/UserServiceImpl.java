@@ -27,5 +27,4 @@ public class UserServiceImpl implements IUserService {
     public List<UserDto> findAll() {
         return userRepository.findAll().stream().map(userConverter::toDto).collect(Collectors.toList());
     }
-
 }

@@ -18,6 +18,9 @@ import lombok.Setter;
 @Table(name = "privilege")
 public class PrivilegeEntity extends AbstractEntity {
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String name;
+
+    @Column
+    private String description;
 }

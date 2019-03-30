@@ -13,13 +13,25 @@ public class UserConverter extends AbstractConverter<UserEntity, UserDto> {
 
     @Override
     public UserEntity toEntity(UserDto dto) {
-        UserEntity entity = new UserEntity();
-        return entity;
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void updateEntity(UserEntity entity, UserDto dto) {
+        // TODO Auto-generated method stub
+
     }
 
     @Override
     public UserDto toDto(UserEntity enity) {
-        return new UserDto();
+        // TODO Auto-generated method stub
+        return null;
     }
 
+    @Override
+    public void updateDto(UserDto dto, UserEntity entity) {
+        // TODO Auto-generated method stub
+
+    }
 }

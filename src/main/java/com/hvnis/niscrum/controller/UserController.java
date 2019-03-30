@@ -3,7 +3,6 @@ package com.hvnis.niscrum.controller;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hvnis.niscrum.dto.UserDto;
@@ -16,13 +15,12 @@ import lombok.AllArgsConstructor;
  */
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/users")
 public class UserController extends AbstractController {
 
     private final IUserService userService;
 
-    @RequestMapping("/")
-    @ResponseBody
+    @RequestMapping
     public List<UserDto> findAll() {
         return userService.findAll();
     }

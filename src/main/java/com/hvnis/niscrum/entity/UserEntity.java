@@ -18,15 +18,18 @@ import lombok.Setter;
 @Table(name = "user")
 public class UserEntity extends AbstractEntity {
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String username;
 
-    @Column
+    @Column(nullable = false)
     private String password;
-    
-    @Column
+
+    @Column(nullable = false)
     private String salt;
 
     @Column
     private Boolean enabled;
+
+    @Column
+    private String description;
 }
