@@ -39,7 +39,8 @@ public class CustomAuthenticationManager implements AuthenticationManager {
                             UserEntity userEntity = userEntityOptional.get();
                             if (sha256Encoder.encode(password, userEntity.getSalt()).equals(userEntity.getPassword())) {
                                 return new CustomAuthentication(username, password,
-                                        userCache.getUserAuthorities(userEntity), userEntity, true);
+                                        userCache.getUserAuthorities(userEntity), userEntity.getId(),
+                                        userCache.getUserRoles(userEntity), true);
                             }
                         }
                     }

@@ -75,6 +75,10 @@ public class UserCache {
         });
     }
 
+    public Set<UserEntity> getAllUsers() {
+        return userByIdCache.values().stream().collect(Collectors.toSet());
+    }
+
     public Optional<UserEntity> getUserById(Long id) {
         return Optional.ofNullable(userByIdCache.get(id));
     }

@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Service;
 
 import com.hvnis.niscrum.cache.UserCache;
-import com.hvnis.niscrum.entity.UserEntity;
 import com.hvnis.niscrum.exception.TokenRuntimeException;
 import com.hvnis.niscrum.security.CustomAuthentication;
 
@@ -35,7 +34,7 @@ public final class TokenAuthenticationService {
 
     public void addAuthentication(HttpServletResponse res, CustomAuthentication authentication) {
         final Claims claims = Jwts.claims();
-        claims.put(USER_ID_CLAIM_KEY, authentication.getUserEntity().map(UserEntity::getId).orElse(0L));
+        claims.put(USER_ID_CLAIM_KEY, authentication.getUserId());
         String JWT = tokenProvider.generateToken(authentication.getName(), claims);
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + JWT);
     }

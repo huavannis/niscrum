@@ -15,6 +15,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import com.hvnis.niscrum.common.Constant;
 import com.hvnis.niscrum.entity.PrivilegeEntity;
 import com.hvnis.niscrum.entity.RoleEntity;
 import com.hvnis.niscrum.entity.RolePrivilegeEntity;
@@ -46,7 +47,7 @@ public class RoleCache {
         roleCache = new HashMap<>();
         rolePrivilegesCache = new HashMap<>();
         roleAuthoritiesCache = new HashMap<>();
-        roleRepository.findAll().stream().forEach(this::updateRole);
+        roleRepository.findAll().forEach(this::updateRole);
     }
 
     public void updateRole(RoleEntity roleEntity) {
@@ -69,11 +70,15 @@ public class RoleCache {
     private void updateRoleAuthorities(RoleEntity roleEntity) {
         Optional.ofNullable(roleEntity).ifPresent(role -> {
             Set<GrantedAuthority> authorities = new HashSet<>();
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
+            authorities.add(new SimpleGrantedAuthority(Constant.SPRING_SECURITY_ROLE_PREFIX + role.getName()));
             getRolePrivileges(role).stream().map(privilegeCache::getAuthority).filter(Optional::isPresent)
                     .map(Optional::get).forEach(authorities::add);
             roleAuthoritiesCache.put(role, authorities);
         });
+    }
+
+    public Set<RoleEntity> getAllRoles() {
+        return roleCache.values().stream().collect(Collectors.toSet());
     }
 
     public Optional<RoleEntity> getRole(Long id) {

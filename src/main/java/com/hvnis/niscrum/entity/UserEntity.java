@@ -31,5 +31,8 @@ public class UserEntity extends AbstractEntity {
     private Boolean enabled;
 
     @Column
+    private Boolean buildin;
+
+    @Column
     private String description;
 }

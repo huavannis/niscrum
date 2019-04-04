@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hvnis.niscrum.dto.PrivilegeDto;
 import com.hvnis.niscrum.dto.RoleDto;
-import com.hvnis.niscrum.dto.UserDto;
 import com.hvnis.niscrum.service.IUserService;
 
 import lombok.AllArgsConstructor;
@@ -18,18 +18,18 @@ import lombok.AllArgsConstructor;
  */
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/v1/users")
-public class UserController extends AbstractController {
+@RequestMapping("/api/v1/roles")
+public class RoleController extends AbstractController {
 
     private final IUserService userService;
 
     @RequestMapping
-    public List<UserDto> getAllUsers() {
-        return userService.getAllUsers();
+    public List<RoleDto> getAllRoles() {
+        return userService.getAllRoles();
     }
 
-    @RequestMapping(value = "/{userId}/roles", method = RequestMethod.GET)
-    public List<RoleDto> getAllRolesByUser(@PathVariable Long userId) {
-        return userService.getAllRolesByUser(userId);
+    @RequestMapping(value = "/{roleId}/privileges", method = RequestMethod.GET)
+    public List<PrivilegeDto> getAllPrivilegesByRole(@PathVariable Long roleId) {
+        return userService.getAllPrivilegesByRole(roleId);
     }
 }

@@ -3,6 +3,8 @@ package com.hvnis.niscrum.cache;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -12,6 +14,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import com.hvnis.niscrum.common.Constant;
 import com.hvnis.niscrum.entity.PrivilegeEntity;
 import com.hvnis.niscrum.repository.PrivilegeRepository;
 
@@ -34,7 +37,7 @@ public class PrivilegeCache {
     private void init() {
         privilegeCache = new HashMap<>();
         authorityCache = new HashMap<>();
-        privilegeRepository.findAll().stream().forEach(this::updatePrivilege);
+        privilegeRepository.findAll().forEach(this::updatePrivilege);
     }
 
     public void updatePrivilege(PrivilegeEntity privilegeEntity) {
@@ -45,8 +48,12 @@ public class PrivilegeCache {
     }
 
     private void updateAuthority(PrivilegeEntity privilegeEntity) {
-        Optional.ofNullable(privilegeEntity).map(
-                privilege -> authorityCache.put(privilege, new SimpleGrantedAuthority("PRIV_" + privilege.getName())));
+        Optional.ofNullable(privilegeEntity).map(privilege -> authorityCache.put(privilege,
+                new SimpleGrantedAuthority(Constant.SPRING_SECURITY_PRIVILEGE_PREFIX + privilege.getName())));
+    }
+
+    public Set<PrivilegeEntity> getAllPrivileges() {
+        return privilegeCache.values().stream().collect(Collectors.toSet());
     }
 
     public Optional<PrivilegeEntity> getPrivilege(Long id) {
